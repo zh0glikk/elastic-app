@@ -1,0 +1,8 @@
+{
+  "elastic_cfg": {
+    "url": "http://127.0.0.1:9200"
+  },
+  "listener_config": {
+    "addr": ":9001"
+  }
+}

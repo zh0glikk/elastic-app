@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<center>
+    <div>
+        <h1>Searching over elastic</h1>
+
+        <input type="search" id="searchingField">
+        <button class="submitBtn" id="submitBtn" onclick="search()">Search</button>
+        <br>
+        <button class="submitBtn" onclick="prev()">Prev</button>
+        <button class="submitBtn" onclick="next()">Next</button>
+        <div id="output">
+
+        </div>
+    </div>
+</center>
+</body>
+</html>
+
+<script type="text/javascript">
+    var limit = 10
+    var offset = 0
+
+    function search() {
+        link = "/items?key="
+        link += $('#searchingField').val()
+        link += "&limit=" + limit
+        link += "&offset=" + offset
+
+        var xhr = $.ajax({
+            url: link,
+            type: "get",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (r) {
+                document.getElementById('output').innerHTML = ""
+                if (r.length === 0) {
+                    $('#output').append("");
+                }
+
+                for (var i = 0; i < r.length; i++) {
+                    let p = document.createElement("p");
+                    p.innerHTML += i + ". " + r[i].title
+                    $('#output').append(p);
+                    $('#output').append(document.createElement("br"));
+                }
+
+            }
+        });
+    }
+
+    function next() {
+        offset = offset+limit
+        search()
+    }
+
+    function prev() {
+        if (offset <= 0) {
+            offset = 0
+            return
+        }
+        offset = offset - limit
+        search()
+    }
+</script>
