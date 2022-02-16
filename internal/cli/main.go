@@ -73,6 +73,21 @@ func Run(args []string) bool {
 				return service.NewService(&cfg).Run(context.Background())
 			},
 		},
+		{
+			Name: "aggregate",
+			Flags: []cli.Flag{
+				&cli.StringSliceFlag{
+					Name: "key",
+				},
+				&cli.StringFlag{
+					Name:  "output",
+					Value: "aggregated",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				return service.Aggregate(&cfg, c.String("key"), c.String("output"))
+			},
+		},
 	}
 
 	if err := app.Run(args); err != nil {

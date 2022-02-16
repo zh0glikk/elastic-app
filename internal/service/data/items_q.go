@@ -85,3 +85,26 @@ func (q *ItemsQ) Search(key string, limit int, offset int) ([]gofeed.Item, error
 
 	return items, nil
 }
+
+func (q *ItemsQ) Aggregation(key string) ([]*elastic.AggregationBucketHistogramItem, error) {
+	query := elastic.NewMultiMatchQuery(key, q.clauses...).Type("phrase_prefix")
+	agg := elastic.NewDateHistogramAggregation().Field("publishedParsed").
+		MinDocCount(0).CalendarInterval("1d")
+
+	res, err := q.client.
+		Search().
+		Index(indexTitle).
+		Query(query).
+		Aggregation("dates_with_holes", agg).
+		Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	h, ok := res.Aggregations.DateHistogram("dates_with_holes")
+	if !ok {
+		return nil, errors.New("failed to get hist")
+	}
+
+	return h.Buckets, nil
+}
