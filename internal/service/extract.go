@@ -27,7 +27,7 @@ func (p PairList) Swap(i, j int) {
 }
 
 func (p PairList) Less(i, j int) bool {
-	return p[i].Value < p[j].Value
+	return p[i].Value > p[j].Value
 }
 
 func Extract(fileTitle string) error {
