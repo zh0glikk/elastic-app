@@ -36,7 +36,6 @@ func Index(fileTitle string, cfg *config.Config) error {
 		return errors.Wrap(err, "failed to read file")
 	}
 
-	//FIXME: could it fail with enormous amount of items????
 	err = itemsQ.BulkIndex(items)
 	if err != nil {
 		return errors.Wrap(err, "failed to bulk index")

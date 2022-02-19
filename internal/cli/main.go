@@ -88,6 +88,18 @@ func Run(args []string) bool {
 				return service.Aggregate(&cfg, c.String("key"), c.String("output"))
 			},
 		},
+		{
+			Name: "extract",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name: "file",
+					Aliases: []string{"f"},
+				},
+			},
+			Action: func(c *cli.Context) error {
+				return service.Extract(c.String("file"))
+			},
+		},
 	}
 
 	if err := app.Run(args); err != nil {
